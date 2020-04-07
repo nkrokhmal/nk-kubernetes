@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: monitoring
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+  logstash.conf: |
+    # all input will come from filebeat, no local logs
+    input {
+    tcp {
+    port => 5000
+    type => syslog
+    }
+    udp {
+    port => 5000
+    type => syslog
+    }}
+    filter {
+    if [type] == "syslog" {
+    json {
+    source => "message"
+    target => "parsed"
+    skip_on_invalid_json => true
+    remove_field => "message"}
+    json {
+    source => "[parsed][message]"
+    target => "final"
+    skip_on_invalid_json => true}
+    mutate {
+    rename => {
+    "[final][FunctionName]" => "FunctionName"
+    "[parsed][level]" => "LogLevel"
+    "[final][InvocationId]" => "InvocationId"
+    "[final][OriginalFormat]" => "OriginalFormat"
+    "[final][customDimensions]" => "CustomDimensions"
+    "[final][IPAddress]" => "IP"}
+    remove_field => ["[parsed][timestamp]", "[parsed][message]", "[final][Time]", "[final][LogLevel]"]}
+    geoip {
+    source => "IP"}}}
+    output {
+    elasticsearch { hosts => ["elasticsearch.default:9200"] }
+    stdout { codec => rubydebug }}

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgadmin-config
+  labels:
+    app: pgadmin
+  namespace: default
+data:
+  PGADMIN_DEFAULT_EMAIL: nkrokhmal
+  PGADMIN_DEFAULT_PASSWORD: kloppolk_2018
+  PGADMIN_PORT: "80"
+

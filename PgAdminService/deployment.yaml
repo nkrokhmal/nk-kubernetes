@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: pgadmin
+  labels:
+    app: pgadmin
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: pgadmin
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+      - image: dpage/pgadmin4:latest
+        imagePullPolicy: Always
+        name: pgadmin
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: "admin"
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: "admin"
+        - name: PGADMIN_PORT
+          value: "80"
+        ports:
+        - containerPort: 80
+          protocol: TCP
+
+
+          
+
