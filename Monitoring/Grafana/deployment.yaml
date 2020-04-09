@@ -21,6 +21,9 @@ spec:
         ports:
         - name: grafana
           containerPort: 3000
+        env:
+        - name: GF_SERVER_ROOT_URL
+          value: "%(protocol)s://%(domain)s/monitoring/grafana"
         volumeMounts:
         - name: grafana-storage
           mountPath: /var/lib/grafana
