@@ -26,6 +26,10 @@ spec:
   - http:
       paths:
       - path: /
+        backend:
+          serviceName: flask-site
+          servicePort: 5000
+      - path: /pgadmin
         backend: 
           serviceName: pgadmin
           servicePort: 5050
