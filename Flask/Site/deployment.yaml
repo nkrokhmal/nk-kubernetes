@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: flask-site
-  namespace: aproject
+  namespace: default
 spec:
   minReadySeconds: 10
   strategy:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: nkrokhmal/flask:latest
+        image: nkrokhmal/flask:2
         ports:
         - name: flask-site
           containerPort: 5000

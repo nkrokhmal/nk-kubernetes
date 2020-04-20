@@ -4,19 +4,21 @@ metadata:
   name: ingress-nginx-default
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^/monitoring/kibana/(.*)$ /$1 break;
-      rewrite ^/monitoring/grafana/(.*)$ /$1 break;
-      proxy_set_header Authorization "";
-    ingress.kubernetes.io/affinity: cookie
+          # nginx.ingress.kubernetes.io/configuration-snippet: |
+          #rewrite ^/monitoring/kibana/(.*)$ /$1 break;
+          #rewrite ^/monitoring/grafana/(.*)$ /$1 break;
+          #rewrite ^/flaskapi/(.*)$ /$1 break;
+          #proxy_set_header Authorization "";
+    #ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/limit-connections: "10000"
     kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/use-regex: "true"
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/client-body-buffer-size: 100m
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
-    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    nginx.ingress.kubernetes.io/enable-cors: "true"
+    #nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    #nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE"
     kubernetes.io/ingress.global-static-ip-name: "staticingress"
     nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For, X-Forwarded-Proto, X-Forwarded-Port, X-Forwarded-Prefix, csrf-token"
@@ -29,22 +31,26 @@ spec:
         backend:
           serviceName: flask-site
           servicePort: 5000
-      - path: /pgadmin
-        backend: 
-          serviceName: pgadmin
-          servicePort: 5050
-      - path: /hello
+      - path: /api
         backend:
-          serviceName: helloweb-backend
-          servicePort: 8080
-      - path: /monitoring/grafana
-        backend:
-          serviceName: grafana
-          servicePort: 3000
-      - path: /monitoring/kibana
-        backend:
-          serviceName: kibana
-          servicePort: 5601
+          serviceName: flask-backend
+          servicePort: 6666
+          #- path: /pgadmin
+          #backend: 
+          #serviceName: pgadmin
+          #servicePort: 5050
+          #- path: /hello
+          #backend:
+          #serviceName: helloweb-backend
+          #servicePort: 8080
+          #- path: /monitoring/grafana
+          # backend:
+          #serviceName: grafana
+          #servicePort: 3000
+          #- path: /monitoring/kibana
+          #backend:
+          #serviceName: kibana
+          #servicePort: 5601
 
 
 

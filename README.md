@@ -19,3 +19,9 @@ $ gcloud compute firewall-rules create test-node-port --allow tcp:node-port
 
 $ kubectl config set-context --current --namespace=my-namespace
 
+Чтобы создать пользователя
+
+$ gcloud iam service-accounts create nkrokhmal --display-name=nkrokhmal
+$ gcloud iam service-accounts add-iam-policy-binding nkrokhmal@shining-lamp-272712.iam.gserviceaccount.com --member=user:krokhmal11@gmail.com --role=roles/iam.serviceAccountUser
+
+
